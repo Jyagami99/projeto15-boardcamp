@@ -5,13 +5,16 @@ import {
   postRentals,
   postRentalsById,
 } from "../controllers/rentalsController.js";
-import { validateRentals } from "../middlewares/rentalsMiddleware.js";
+import {
+  validateRentals,
+  validateReturnDate,
+} from "../middlewares/rentalsMiddleware.js";
 
 const router = Router();
 
 router.get("/rentals", getRentals);
 router.post("/rentals", validateRentals, postRentals);
-router.post("/rentals/:id/return", validateRentals, postRentalsById);
-router.delete("/rentals/:id", deleteRental);
+router.post("/rentals/:id/return", validateReturnDate, postRentalsById);
+router.delete("/rentals/:id", validateReturnDate, deleteRental);
 
 export default router;

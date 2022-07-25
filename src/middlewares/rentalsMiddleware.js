@@ -32,12 +32,38 @@ export async function validateRentals(req, res, next) {
       if (!query) return true;
       return dataFromArray === query;
     }
+
     const filteredRentals = rentalsList.filter((rental) =>
       filterRentals(rental.gameId, parseInt(gameId))
     );
 
     if (filteredRentals.length >= gameIdVerify[0].stockTotal)
       return res.sendStatus(400);
+
+    next();
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+}
+
+export async function validateReturnDate(req, res, next) {
+  const id = req.params.id;
+  try {
+    const { rows: rental } = await connection.query(
+      `
+      SELECT rentals.*, games."pricePerDay" 
+      FROM rentals
+      JOIN games ON games.id = rentals."gameId"
+      WHERE rentals.id = $1;
+      `,
+      [id]
+    );
+
+    if (rental.length === 0) return res.sendStatus(404);
+    if (rental[0].returnDate) return res.sendStatus(400);
+
+    res.locals.rental = rental;
 
     next();
   } catch (error) {
