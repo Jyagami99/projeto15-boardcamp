@@ -13,13 +13,13 @@ export async function validateCustomer(req, res, next) {
     if (id) {
       isCpfRegistered = await connection.query(
         `SELECT * FROM customers
-        WHERE customers.cpf = $2 AND customers.id != $1;`,
+          WHERE customers.cpf = $2 AND customers.id != $1;`,
         [id, cpf]
       );
     } else {
       isCpfRegistered = await connection.query(
         `SELECT * FROM customers
-        WHERE customers.cpf = $1;`,
+          WHERE customers.cpf = $1;`,
         [cpf]
       );
     }

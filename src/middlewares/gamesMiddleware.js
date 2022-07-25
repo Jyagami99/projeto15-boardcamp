@@ -4,10 +4,8 @@ export async function validateGame(req, res, next) {
   const { name, image, stockTotal, categoryId, pricePerDay } = req.body;
   try {
     const { rows: idVerify } = await connection.query(
-      `
-      SELECT * FROM categories
-      WHERE ID=$1;
-      `,
+      `SELECT * FROM categories
+      WHERE ID=$1;`,
       [categoryId]
     );
 
@@ -15,8 +13,7 @@ export async function validateGame(req, res, next) {
       return res.sendStatus(400);
 
     const { rows: nameVerify } = await connection.query(
-      `
-      SELECT * FROM games
+      `SELECT * FROM games
       WHERE name = $1;`,
       [name]
     );

@@ -5,21 +5,19 @@ export async function getGames(req, res) {
   let games;
   try {
     if (!name) {
-      games = await connection.query(`
-      SELECT games.*, categories.name AS "categoryName"
-      FROM games
-      JOIN categories
-      ON games."categoryId" = categories.id;
-      `);
+      games = await connection.query(
+        `SELECT games.*, categories.name AS "categoryName"
+        FROM games
+        JOIN categories
+        ON games."categoryId" = categories.id;`
+      );
     } else {
       games = await connection.query(
-        `
-      SELECT games.*, categories.name AS "categoryName"
-      FROM games
-      JOIN categories
-      ON games."categoryId" = categories.id
-      WHERE games.name ILIKE $1;
-      `,
+        `SELECT games.*, categories.name AS "categoryName"
+        FROM games
+        JOIN categories
+        ON games."categoryId" = categories.id
+        WHERE games.name ILIKE $1;`,
         [name + "%"]
       );
     }
@@ -35,7 +33,7 @@ export async function postGames(req, res) {
   try {
     connection.query(
       `INSERT INTO games (name, image, "stockTotal", "categoryId", "pricePerDay")
-      VALUES ($1, $2, $3, $4, $5); `,
+      VALUES ($1, $2, $3, $4, $5);`,
       [name, image, stockTotal, categoryId, pricePerDay]
     );
     res.sendStatus(201);

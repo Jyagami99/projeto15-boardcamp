@@ -36,12 +36,11 @@ export async function getCustomerById(req, res) {
   }
 }
 
-export async function postCustomers(req, res) {
+export async function postCustomer(req, res) {
   const { name, phone, cpf, birthday } = req.body;
   try {
     await connection.query(
-      `
-      INSERT INTO customers(name, phone, cpf, birthday)
+      `INSERT INTO customers(name, phone, cpf, birthday)
       VALUES ($1, $2, $3, $4);`,
       [name, phone, cpf, birthday]
     );
@@ -57,10 +56,9 @@ export async function updateCustomer(req, res) {
   const id = req.params.id;
   try {
     await connection.query(
-      `
-      UPDATE customers SET name=$2, phone=$3, cpf=$4, birthday=$5
-      WHERE id=$1; `,
-      [(id, name, phone, cpf, birthday)]
+      `UPDATE customers SET name=$2, phone=$3, cpf=$4, birthday=$5
+      WHERE id = $1;`,
+      [id, name, phone, cpf, birthday]
     );
     res.sendStatus(200);
   } catch (error) {
